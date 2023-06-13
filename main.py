@@ -20,8 +20,9 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.agents.agent_toolkits import (create_vectorstore_agent, VectorStoreToolkit, VectorStoreInfo)
 
-llm = OpenAI(temperature=0.1, verbose=True, openai_api_key=OpenAI_key) #could be neater using a virtual environment and setting the environ key
-embeddings = OpenAIEmbeddings(openai_api_key=OpenAI_key)
+os.environ['OPENAI_API_KEY'] = OpenAI_key
+llm = OpenAI(temperature=0.1, verbose=True)
+embeddings = OpenAIEmbeddings()
 
 def load_lottieurl(url):
     r = requests.get(url)
@@ -57,7 +58,7 @@ if input_file and does_file_have_pdf_extension(input_file):
         pages = loader.load_and_split()
         store = Chroma.from_documents(pages, embeddings, collection_name="analysis")
         vectorstore_info = VectorStoreInfo(name = filename, description="analyzing pdf", vectorstore=store)
-        toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info, openai_api_key=OpenAI_key)
+        toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
         agent_executor = create_vectorstore_agent(llm=llm, toolkit=toolkit, verbose=True)
     scs.empty()
 

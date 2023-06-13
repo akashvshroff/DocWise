@@ -2,3 +2,4 @@ constants.py
 __pycache__
 data/
 .chroma/
+env/
