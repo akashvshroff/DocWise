@@ -41,7 +41,7 @@ st.set_page_config(page_title="DocWise")
 #st.markdown(hide_menu_style, unsafe_allow_html=True)
 st_lottie(lottie_file, height=200, key='coding')
 
-st.title("**DocWise: Your AI PDF Analysis Assistant**")
+st.title("**DocWise: Your AI PDF Analysis Assistant!**")
 st.write(
     "Upload your **:blue[pdf]** and ask your personal AI assistant any questions about it!")
 
@@ -82,8 +82,6 @@ if st.session_state['uploaded']:
         with st.expander("Similarity Search"):
             search = store.similarity_search_with_score(prompt)
             st.write(search[0][0].page_content)
-        
-        
 
 
 
