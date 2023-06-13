@@ -57,7 +57,7 @@ if input_file and does_file_have_pdf_extension(input_file):
         pages = loader.load_and_split()
         store = Chroma.from_documents(pages, embeddings, collection_name="analysis")
         vectorstore_info = VectorStoreInfo(name = filename, description="analyzing pdf", vectorstore=store)
-        toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
+        toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info, openai_api_key=OpenAI_key)
         agent_executor = create_vectorstore_agent(llm=llm, toolkit=toolkit, verbose=True)
     scs.empty()
 
