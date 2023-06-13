@@ -20,7 +20,7 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.agents.agent_toolkits import (create_vectorstore_agent, VectorStoreToolkit, VectorStoreInfo)
 
-llm = OpenAI(temperature=0.1, verbose=True, openai_api_key=OpenAI_key)
+llm = OpenAI(temperature=0.1, verbose=True, openai_api_key=OpenAI_key) #could be neater using a virtual environment and setting the environ key
 embeddings = OpenAIEmbeddings(openai_api_key=OpenAI_key)
 
 def load_lottieurl(url):
