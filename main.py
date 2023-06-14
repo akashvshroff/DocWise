@@ -41,47 +41,54 @@ st.set_page_config(page_title="DocWise")
 #st.markdown(hide_menu_style, unsafe_allow_html=True)
 st_lottie(lottie_file, height=200, key='coding')
 
-st.title("**DocWise: Your AI PDF Analysis Assistant!**")
-st.write(
-    "Upload your **:blue[pdf]** and ask your personal AI assistant any questions about it!")
+st.title("**DocWise: An AI PDF Analysis Tool**")
 
 if 'uploaded' not in st.session_state:
     st.session_state['uploaded'] = False
+    st.session_state['filename'] = None
 
 if 'agent_executor' not in st.session_state:
     st.session_state['agent_executor'] = None
     st.session_state['store'] = None
 
-input_file = st.file_uploader('Choose a file')
+if not st.session_state['uploaded']:
+    st.write(
+        "Upload your **:blue[pdf]** and ask your personal AI assistant any questions about it!")
+    input_file = st.file_uploader('Choose a file')
 
-if not st.session_state['uploaded'] and input_file and does_file_have_pdf_extension(input_file):
-    path = store_pdf_file(input_file, dir)
-    scs = st.success("File successfully uploaded")
-    filename = input_file.name
+    if input_file and does_file_have_pdf_extension(input_file):
+        path = store_pdf_file(input_file, dir)
+        scs = st.success("File successfully uploaded")
+        filename = input_file.name
 
-    with st.spinner("Analyzing document..."):
-        loader = PyPDFLoader(path)
-        pages = loader.load_and_split()
-        store = Chroma.from_documents(pages, embeddings, collection_name="analysis")
-        vectorstore_info = VectorStoreInfo(name = filename, description="analyzing pdf", vectorstore=store)
-        toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
-        agent_executor = create_vectorstore_agent(llm=llm, toolkit=toolkit, verbose=True)
-        st.session_state['agent_executor'] = agent_executor
-        st.session_state['store'] = store
-    scs.empty()
+        with st.spinner("Analyzing document..."):
+            loader = PyPDFLoader(path)
+            pages = loader.load_and_split()
+            store = Chroma.from_documents(pages, embeddings, collection_name="analysis")
+            vectorstore_info = VectorStoreInfo(name = filename, description="analyzing pdf", vectorstore=store)
+            toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
+            agent_executor = create_vectorstore_agent(llm=llm, toolkit=toolkit, verbose=True)
+            st.session_state['agent_executor'] = agent_executor
+            st.session_state['store'] = store
+        scs.empty()
 
-    st.session_state['uploaded'] = True
+        st.session_state['uploaded'] = True
+        st.session_state['filename'] = filename
+
+        st.experimental_rerun()
 
 if st.session_state['uploaded']:
-    prompt = st.text_input("Input your question here")
+    st.write(f"Enter your questions about the document \'{st.session_state['filename']}\' below:")
+    prompt = st.text_input("Type your query")
     if prompt:
         agent_executor = st.session_state['agent_executor']
         store = st.session_state['store']
-        response = agent_executor(prompt)
-        st.write(response["output"])
-        with st.expander("Similarity Search"):
-            search = store.similarity_search_with_score(prompt)
-            st.write(search[0][0].page_content)
+        with st.spinner("Generating response..."):
+            response = agent_executor(prompt)
+            st.write(response["output"])
+            with st.expander("Similarity Search"):
+                search = store.similarity_search_with_score(prompt)
+                st.write(search[0][0].page_content)
 
 
 
