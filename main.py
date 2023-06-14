@@ -28,13 +28,7 @@ def load_lottieurl(url):
 
 lottie_file = load_lottieurl("https://assets8.lottiefiles.com/packages/lf20_G6Lxp3nm1p.json")
 
-hide_menu_style = """
-<style>
-footer {visibility: hidden; }
-</style>
-"""
 st.set_page_config(page_title="DocWise")
-#st.markdown(hide_menu_style, unsafe_allow_html=True)
 st_lottie(lottie_file, height=200, key='coding')
 
 st.title("**DocWise: An AI PDF Analysis Tool**")
