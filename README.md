@@ -11,7 +11,12 @@
 - The two sections briefly cover the tech that I used to build this system. I learnt a lot of the tools, especially on the langchain side, from Nicholas Renotte's wonderful tutorial that can be found [here](https://www.youtube.com/watch?v=u8vQyTzNGVY&list=PLp7virpu8w7XuBgGJvEWZaLsBM-hnBjq1&index=13&t=195s&ab_channel=NicholasRenotte).
 - LangChain covers the interaction with the OpenAI API and working with the user-uploaded file to generate the vector embeddings and Streamlit was used to generate a lightweight UI that facilitates interacting with the application.
 ### LangChain
-
+- This project employs the LangChain *ecosystem* to add context to the OpenAI API. 
+- The general workflow is as follows: 
+    - The user uploads a PDF document that is saved to memory by PyPDFLoader. The document is broken into pages or more digestible chunks for the next few steps.
+    - Then, the chunks are tokenized and embedded by Chroma. The vector embedding of the data allows us to pass the data as context to the model and allows us to perform mathematical operations to the data - such as cosine similarity, which allows us to find the most relevant sections of the PDF and display them to the user. 
+    - Each of these components could be replaced by other services, for example, Pinecone for an online vector store. 
+    - The results from the vectorstore search are passed to the LangChain vectorstore agent that converts the data into a better *aligned* or more humanlike response, using the OpenAI models. The vectorstore toolkit by LangChain renders the vectorstore generated from the PDF available as a *tool* to the model that it can use to generate its answers. 
 ### Streamlit
 - Streamlit allows you to build incredibly lightweight UIs with shockingly few lines of code. It's got a variety of built in widgets like file upload and text input that seamlessly integrate together to form a clean interface.
 - On any interaction by the user, Streamlit re-runs the entire python script from scratch and doesn't maintain state data across refreshes by default.
