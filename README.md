@@ -22,4 +22,4 @@
 - On any interaction by the user, Streamlit re-runs the entire python script from scratch and doesn't maintain state data across refreshes by default.
 - Using the session state option and some basic control flow functions, I was able to add some necessary functionality to the app and hide certain components depending on the user action. For example, if the user has not uploaded any context document, they cannot make any queries.
 - Moreover, through this form of state management, I ensure that the computationally intensive LangChain functions aren't rerun for every user input and instead only run once, when the document is uploaded.
-- In terms of the visuals, I am using a free animation from Lottie that can be found [here].(https://lottiefiles.com/143151-robot-futuristic-ai-animated)
+- In terms of the visuals, I am using a free animation from Lottie that can be found [here](https://lottiefiles.com/143151-robot-futuristic-ai-animated).
